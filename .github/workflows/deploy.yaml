@@ -12,21 +12,31 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+
+    - name: Authenticate with Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEYY }}
 
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
       with:
-        version: 'latest'
-        project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
+        project_id: ${{ secrets.GCLOUD_PROJECT_ID }}  
 
-    - name: Authenticate with service account
-      run: |
-        echo '$ {{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}' | jq '.' > $HOME/gcloud-key.json
-        gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
+    # - name: Set up Google Cloud SDK
+    #   uses: google-github-actions/setup-gcloud@v1
+    #   with:
+    #     version: 'latest'
+    #     project_id: ${{ secrets.GCLOUD_PROJECT_ID }}
 
-    - name: Set Project ID
-      run: gcloud config set project $ {{ secrets.GCLOUD_PROJECT_ID }}
+    # - name: Authenticate with service account
+    #   run: |
+    #     echo '$ {{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}' | jq '.' > $HOME/gcloud-key.json
+    #     gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
+
+    # - name: Set Project ID
+    #   run: gcloud config set project $ {{ secrets.GCLOUD_PROJECT_ID }}
 
     - name: Deploy to Google Cloud Functions
       run: |
