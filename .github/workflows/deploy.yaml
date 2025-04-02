@@ -23,6 +23,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ secrets.GCLOUD_PROJECT_ID }}  
+        version: 'latest'
 
     # - name: Set up Google Cloud SDK
     #   uses: google-github-actions/setup-gcloud@v1
@@ -41,7 +42,7 @@ jobs:
     - name: Deploy to Google Cloud Functions
       run: |
         gcloud functions deploy get_api_data \
-        --alow-unauthenticated \
+        --allow-unauthenticated \
         --gen2 \
         --runtime python312 \
         --trigger-http \
