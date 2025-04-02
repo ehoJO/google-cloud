@@ -21,13 +21,15 @@ def hello_http(request):
     """
     #request_json = request.get_json(silent=True)
     #request_args = request.arg
-    request_method = request.method
+    # request_method = request.method
 
-    if request_method == 'POST':
-        return '200', 200
-    elif request_method == 'GET':
-        return '400', 400
-    elif request_method in ['PUT', 'DELETE']:
-        return '500', 500
-    else:
-        return 'Method unsupported'
+    # if request_method == 'POST':
+    #     return '200', 200
+    # elif request_method == 'GET':
+    #     return '400', 400
+    # elif request_method in ['PUT', 'DELETE']:
+    #     return '500', 500
+    # else:
+    #     return 'Method unsupported'
+
+    return "test"
