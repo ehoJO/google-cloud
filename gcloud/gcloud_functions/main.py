@@ -32,4 +32,4 @@ def hello_http(request):
     # else:
     #     return 'Method unsupported'
 
-    return "test2"
+    return "test_print_anything"
