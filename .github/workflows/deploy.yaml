@@ -39,7 +39,10 @@ jobs:
     # - name: Set Project ID
     #   run: gcloud config set project $ {{ secrets.GCLOUD_PROJECT_ID }}
 
-    - name: Deploy to Google Cloud Functions
+    #- name: Write GCP credentials to file
+    #  run: echo "${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}" | jq '.' > key.json
+
+    - name: Deploy to Google Cloud Functions 
       run: |
         gcloud functions deploy get_api_data \
         --allow-unauthenticated \
@@ -49,8 +52,7 @@ jobs:
         --entry-point hello_http \
         --region europe-central2 \
         --source ./gcloud/gcloud_functions \
-        --service-account=517159496780-compute@developer.gserviceaccount.com
-        
+        --service-account=project-service-account@unified-destiny-466509-p5.iam.gserviceaccount.com
 
 
     

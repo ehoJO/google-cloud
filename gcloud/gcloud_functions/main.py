@@ -2,6 +2,8 @@ import functions_framework
 import sys
 import os
 import requests
+from google.cloud import pubsub_v1
+import json
 
 
 class MovieFetcher:
@@ -84,7 +86,7 @@ class MovieFetcher:
         cast_data = []
         for movie_id in movie_ids:
             try:
-                cast_list = self.get_movie_cast(movie_id)[:top_n]  # only top N actors
+                cast_list = self.get_movie_cast(movie_id)[:top_n] 
                 for cast in cast_list:
                     cast_data.append({
                         "movie_id": movie_id,
@@ -108,10 +110,34 @@ def hello_http(request):
         Response object using `make_response`
         <https://flask.palletsprojects.com/en/1.1.x/api/#flask.make_response>.
     """
+    project_id = "numeric-datum-450017-k4"
+    topic_id = "projects/numeric-datum-450017-k4/topics/test"
+
+    # key_json = os.environ.get("GCP_SERVICE_ACCOUNT_JSON")
+    # key_dict = json.loads(key_json)
+    # key_path = "/tmp/key.json"
+
+    # with open(key_path, "w") as f:
+    #     json.dump(key_dict, f)
+
 
     fetcher = MovieFetcher(api_key="9369a5ad92b5bf33193a720693c63ed7")
     movies_df = fetcher.collect_movies_dataframe(pages=2)
     reviews_df = fetcher.collect_reviews_dataframe(movies_df["id"])
     cast_df = fetcher.collect_cast_dataframe(movies_df["id"])
 
-    return "api_blabla"
+    data = {
+        "movies": movies_df.to_dict(orient="records"),
+        "reviews": reviews_df.to_dict(orient="records"),
+        "cast": cast_df.to_dict(orient="records")
+    }
+    data_str = json.dumps(data)
+    data_bytes = data_str.encode("utf-8")
+
+    #credentials = (service_account.Credentials.from_service_account_file(key_path))
+    publisher = pubsub_v1.PublisherClient()
+
+    topic_path = publisher.topic_path(project_id, topic_id)
+    future = publisher.publish(topic_path, data_bytes)
+
+    return f"Published message ID: {future.result()}"
