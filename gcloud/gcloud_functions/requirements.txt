@@ -1,3 +1,4 @@
-requests
 functions-framework
+requests
 pandas
+google-cloud-pubsub

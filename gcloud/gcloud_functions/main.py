@@ -4,6 +4,7 @@ import os
 import requests
 from google.cloud import pubsub_v1
 import json
+import pandas as pd
 
 
 class MovieFetcher:
